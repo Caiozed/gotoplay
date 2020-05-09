@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GotoPlay</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="upcoming_releases">Upcoming Releases</string>
+
+    <string name="game_transition">game_transition</string>
+
+</resources>

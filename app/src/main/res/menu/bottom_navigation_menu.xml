@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/navigation_sms"
+        android:icon="@drawable/ic_backlog"
+        android:title="Backlog" />
+
+    <item
+        android:id="@+id/navigation_playing"
+        android:icon="@drawable/ic_play"
+        android:title="Playing" />
+
+    <item
+        android:id="@+id/navigation_play"
+        android:icon="@drawable/ic_played"
+        android:title="Played" />
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search" />
+</menu>
