@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.caiozed.gotoplay.mainactivitypkg.fragments.BacklogViewModel" />
+            type="com.caiozed.gotoplay.mainactivitypkg.fragments.PlayedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/backlog_grid"
+            android:id="@+id/played_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="200dp"

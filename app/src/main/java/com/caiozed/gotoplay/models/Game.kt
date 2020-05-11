@@ -2,9 +2,9 @@ package com.caiozed.gotoplay.models
 
 import java.io.Serializable
 
-data class Game(var id: Int,
+data class Game(var id: Long,
                 var category: Int,
-                var cover: Int,
+                var cover: Long,
                 var created_at: Int,
                 var name: String,
                 var slug: String,
@@ -14,4 +14,6 @@ data class Game(var id: Int,
                 var rating: Float) : Serializable {
 
     var coverData: Cover? = null
+    var base64Image: String? = null
+    var status: Int? = null
 }

@@ -35,7 +35,7 @@ class IGDBService {
             }
         }
 
-         fun getCovers(coverIds: List<Int>?): MutableList<Cover>{
+         fun getCovers(coverIds: List<Long>?): MutableList<Cover>{
             val(_, _, result ) = Fuel.post(covers)
                 .header("user-key", userKey)
                 .body("fields *; where id = (${coverIds?.joinToString(",")});"

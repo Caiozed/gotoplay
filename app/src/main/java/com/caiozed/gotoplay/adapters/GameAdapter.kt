@@ -1,23 +1,35 @@
 package com.caiozed.gotoplay.adapters
 
-import com.caiozed.gotoplay.R
+import android.app.ActionBar
 import android.app.ActivityOptions
+import android.content.ClipData
+import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.util.Log.d
 import android.util.Pair
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import androidx.recyclerview.widget.RecyclerView
+import com.caiozed.gotoplay.R
+import com.caiozed.gotoplay.database.GamesDbHelper
 import com.caiozed.gotoplay.mainactivitypkg.GameDetailsActivity
 import com.caiozed.gotoplay.mainactivitypkg.MainActivity
+import com.caiozed.gotoplay.mainactivitypkg.fragments.BacklogFragment
+import com.caiozed.gotoplay.mainactivitypkg.fragments.HomeFragment
+import com.caiozed.gotoplay.mainactivitypkg.fragments.PlayedFragment
+import com.caiozed.gotoplay.mainactivitypkg.fragments.PlayingFragment
 import com.caiozed.gotoplay.models.Game
-import com.caiozed.gotoplay.utils.doAsyncMain
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
+import com.caiozed.gotoplay.utils.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.game_layout.view.*
 import java.io.Serializable
+import android.R as AndroidR
 
 class GameAdapter(private var games: MutableList<Game?>?) :
     RecyclerView.Adapter<GameAdapter.GameHolder>() {
@@ -58,39 +70,18 @@ class GameAdapter(private var games: MutableList<Game?>?) :
             val game = this.games!![position]
             holder.itemView.game_text.background = null
             holder.itemView.game_text.text = game?.name
-            var img = ImageView(holder.itemView.context)
 
             //Add image to grid
             doAsyncMain{
-                Picasso.get()
-                    .load("https://images.igdb.com/igdb/image/upload/t_720p/${game?.coverData?.image_id}.jpg")
-                    //.placeholder(TextDrawable(game.name))
-                    //.error(TextDrawable(game.name))
-                    .into(img,
-                        object: Callback {
-                            override fun onSuccess() {
-                                //set animations here
-                                holder.itemView.game_text.text = "";
-                                holder.itemView.game_text.background = img.drawable
-                            }
-
-                            override fun onError(e: Exception?) {
-                                holder.itemView.game_text.background = null
-                                d("Image Not Found", "Image for game ${game?.name} not found")
-                            }
-                        })
+                if (game != null) {
+                    processImage(game, holder.itemView)
+                }
             }.execute()
 
-            holder.itemView.setOnClickListener {
-                var intent = Intent(holder.itemView.context, GameDetailsActivity::class.java)
-                var containerStr = holder.itemView.context.getString(R.string.game_transition)
+            if (game != null) {
+                setClickEvents(holder.itemView, game, position)
+            }
 
-                var options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.instance,
-                    Pair.create<View, String>(holder.itemView.game_container, containerStr))
-
-                intent.putExtra("game", game as Serializable)
-                MainActivity.instance.startActivity(intent, options.toBundle())
-            };
         } else { //Do whatever you want. Or nothing !!
         }
     }
@@ -106,23 +97,164 @@ class GameAdapter(private var games: MutableList<Game?>?) :
     }
 
     public fun addNullData() {
-        if(games?.size == 0 || games?.last() != null){
-            games!!.add(null)
-            MainActivity.instance.runOnUiThread {
-                if(games?.size!! > 0) {
-                    notifyItemInserted(games!!.size)
+        try{
+            if(games?.size == 0 || games?.last() != null){
+                games!!.add(null)
+                MainActivity.instance.runOnUiThread {
+                    if(games?.size!! > 0) {
+                        notifyItemInserted(games!!.size)
+                    }
+                }
+            }
+        }
+        catch (e: Exception) {
+            d("Exception", e.toString())
+        }
+    }
+
+    public fun removeNull() {
+        try {
+            if(games?.size!! > 0 && games?.last() == null){
+                games?.removeAt(games?.size!! - 1)
+
+                MainActivity.instance.runOnUiThread {
+                    notifyDataSetChanged()
+                }
+            }
+        }
+        catch (e: Exception) {
+            d("Exception", e.toString())
+        }
+    }
+
+    private fun removeItem (view: View, position: Int){
+        val anim: Animation = AnimationUtils.loadAnimation(
+            view.context,
+            AndroidR.anim.fade_out
+        )
+        anim.duration = 300
+        view.startAnimation(anim)
+
+        Handler().postDelayed(Runnable {
+            games?.removeAt(position)
+            notifyItemRemoved(position) //Refresh list
+        }, anim.duration)
+    }
+
+
+    private fun setClickEvents(view: View, game: Game, position: Int){
+        //Add click event to image container
+        view.game_text.setOnClickListener {
+            var intent = Intent(view.context, GameDetailsActivity::class.java)
+            var containerStr = view.context.getString(R.string.game_transition)
+
+            var options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.instance,
+                Pair.create<View, String>(view.game_container, containerStr))
+
+            intent.putExtra("game", game as Serializable)
+            MainActivity.instance.startActivity(intent, options.toBundle())
+        };
+
+        when(MainActivity.instance.currentFragment){
+            is HomeFragment ->{
+                view.fab_add_to_backlog.setOnClickListener{
+                    insertAnimation(R.id.navigation_backlog)
+                    updateGame(game, view, GameStatus.Backlog)
+                }
+
+                view.fab_add_to_play.setOnClickListener{
+                    insertAnimation(R.id.navigation_playing)
+                    updateGame(game, view, GameStatus.Playing)
+                }
+
+                view.fab_add_to_played.setOnClickListener{
+                    insertAnimation(R.id.navigation_played)
+                    updateGame(game, view, GameStatus.Played)
+                }
+            }
+
+            is BacklogFragment -> {
+                view.fab_add_to_backlog.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
+                view.fab_add_to_backlog.setOnClickListener{
+                    deleteGame(game, view, position)
+                }
+
+                view.fab_add_to_play.setOnClickListener{
+                    insertAnimation(R.id.navigation_playing)
+                    updateGame(game, view, GameStatus.Playing)
+                    removeItem(view, position)
+                }
+
+                view.fab_add_to_played.setOnClickListener{
+                    insertAnimation(R.id.navigation_played)
+                    updateGame(game, view, GameStatus.Played)
+                    removeItem(view, position)
+                }
+            }
+
+            is PlayingFragment -> {
+                view.fab_add_to_play.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
+                view.fab_add_to_play.setOnClickListener{
+                    deleteGame(game, view, position)
+                }
+
+                view.fab_add_to_backlog.setOnClickListener{
+                    insertAnimation(R.id.navigation_backlog)
+                    updateGame(game, view, GameStatus.Backlog)
+                    removeItem(view, position)
+                }
+
+                view.fab_add_to_played.setOnClickListener{
+                    insertAnimation(R.id.navigation_played)
+                    updateGame(game, view, GameStatus.Played)
+                    removeItem(view, position)
+                }
+            }
+
+            is PlayedFragment -> {
+                view.fab_add_to_played.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
+                view.fab_add_to_played.setOnClickListener{
+                    deleteGame(game, view, position)
+                }
+
+                view.fab_add_to_backlog.setOnClickListener{
+                    insertAnimation(R.id.navigation_backlog)
+                    updateGame(game, view, GameStatus.Backlog)
+                    removeItem(view, position)
+                }
+
+                view.fab_add_to_play.setOnClickListener{
+                    insertAnimation(R.id.navigation_playing)
+                    updateGame(game, view, GameStatus.Played)
+                    removeItem(view, position)
                 }
             }
         }
     }
 
-    public fun removeNull() {
-        if(games?.size!! > 0 && games?.last() == null){
-            games?.removeAt(games?.size!! - 1)
-
-            MainActivity.instance.runOnUiThread {
-                notifyItemRemoved(games!!.size)
-            }
+    private fun deleteGame(game: Game?, view: View, position: Int){
+        if (game != null) {
+            var dbContext = GamesDbHelper(view.context)
+            dbContext.delete(game, dbContext.writableDatabase)
+            removeItem(view, position)
         }
+    }
+
+    private fun updateGame(game: Game?, view: View, status: GameStatus){
+        if (game != null) {
+            game.status = status.value
+            var dbContext = GamesDbHelper(view.context)
+            dbContext.upsert(game, dbContext.writableDatabase)
+        }
+    }
+
+    private fun insertAnimation(resourceId : Int){
+        var view = MainActivity.instance.findViewById<View>(resourceId)
+
+        val anim: Animation = AnimationUtils.loadAnimation(
+            view.context,
+            R.anim.bounce
+        )
+        view.startAnimation(anim)
     }
 }

@@ -6,7 +6,7 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/navigation_sms"
+        android:id="@+id/navigation_backlog"
         android:icon="@drawable/ic_backlog"
         android:title="Backlog" />
 
@@ -16,7 +16,7 @@
         android:title="Playing" />
 
     <item
-        android:id="@+id/navigation_play"
+        android:id="@+id/navigation_played"
         android:icon="@drawable/ic_played"
         android:title="Played" />
 

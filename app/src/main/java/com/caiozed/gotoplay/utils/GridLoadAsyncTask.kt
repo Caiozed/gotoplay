@@ -21,7 +21,7 @@ public class GridLoadAsyncTask (var grid: RecyclerView,
         super.onPreExecute();
         adapter = GameAdapter(games as MutableList<Game?>)
         grid.layoutManager = layoutManager
-        grid.adapter = adapter
+        grid.swapAdapter(adapter, true)
 //        dialog.show()
     }
 
@@ -53,10 +53,9 @@ public class GridLoadAsyncTask (var grid: RecyclerView,
         adapter!!.addNullData()
 
         games = backgroundFunc()
-
+        adapter!!.removeNull()
 
         if(games?.count()!! > 0){
-            adapter!!.removeNull()
             adapter?.addItems(games!!)
         }
     }

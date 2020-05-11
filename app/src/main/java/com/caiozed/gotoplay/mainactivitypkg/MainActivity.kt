@@ -1,27 +1,22 @@
 package com.caiozed.gotoplay.mainactivitypkg
 
-import android.app.Activity
-import android.app.ActivityOptions
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Pair
 import android.view.MenuItem
-import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.caiozed.gotoplay.R
-import com.caiozed.gotoplay.mainactivitypkg.fragments.BacklogFragment
-import com.caiozed.gotoplay.mainactivitypkg.fragments.HomeFragment
-import com.caiozed.gotoplay.mainactivitypkg.fragments.SearchFragment
+import com.caiozed.gotoplay.mainactivitypkg.fragments.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.game_layout.view.*
-import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
     var bottomNavigation: BottomNavigationView? = null
+    var currentFragment: Fragment? = null
 
     companion object {
         lateinit var instance: MainActivity
@@ -29,11 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         instance = this
+        window.statusBarColor = Color.parseColor("#80FF0000")
+        window.navigationBarColor = Color.parseColor("#BFBFBF")
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation!!.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        openFragment(HomeFragment.newInstance());
+        openFragment(HomeFragment());
     }
 
 
@@ -42,11 +40,19 @@ class MainActivity : AppCompatActivity() {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when (item.itemId) {
                     R.id.navigation_home -> {
-                        openFragment(HomeFragment.newInstance())
+                        openFragment(HomeFragment())
                         return true
                     }
-                    R.id.navigation_sms -> {
-                        openFragment(BacklogFragment.newInstance("", ""))
+                    R.id.navigation_backlog -> {
+                        openFragment(BacklogFragment())
+                        return true
+                    }
+                    R.id.navigation_playing -> {
+                        openFragment(PlayingFragment())
+                        return true
+                    }
+                    R.id.navigation_played -> {
+                        openFragment(PlayedFragment())
                         return true
                     }
                     R.id.navigation_search -> {
@@ -61,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     fun openFragment(fragment: Fragment?) {
+        currentFragment = fragment
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         if (fragment != null) {
             transaction.replace(R.id.container, fragment)

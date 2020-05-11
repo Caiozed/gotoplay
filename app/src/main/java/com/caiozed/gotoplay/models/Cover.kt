@@ -3,7 +3,7 @@ package com.caiozed.gotoplay.models
 
 import java.io.Serializable
 
-data class Cover (var game: Int,
+data class Cover (var game: Long,
                   var height: Int,
                   var image_id: String,
                   var url: String,

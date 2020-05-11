@@ -1,13 +1,36 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#80FF0000</item>
 
         <item name="android:windowActivityTransitions">true</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
+        <item name="floatingActionButtonStyle">@style/fab_style</item>
+
+        <item name="bottomSheetDialogTheme">@style/bottom_sheet_style</item>
+    </style>
+
+    <style name="fab_style" parent="Widget.Design.FloatingActionButton">
+        <item name="colorPrimary">#ffffffff</item>
+        <item name="colorOnPrimary">#ffffffff</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">#E8E8E8</item>
+    </style>
+
+    <style name="bottom_sheet_style" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:background">@drawable/rounded_dialog</item>
+<!--        <item name="color">#FF0D0D</item>-->
+<!--        <item name="colorOnPrimary">#C8FF0000</item>-->
     </style>
 
 </resources>

@@ -55,8 +55,8 @@ class SearchFragment : BottomSheetDialogFragment() {
             val behavior = params.behavior
             val bottomSheetBehavior =
                 behavior as BottomSheetBehavior<*>?
-            bottomSheetBehavior!!.peekHeight = view.measuredHeight
-            parent.setBackgroundColor(Color.WHITE)
+            bottomSheetBehavior!!.peekHeight = view.measuredHeight - 30
+            parent.setBackgroundColor(Color.TRANSPARENT)
         }
     }
 }
