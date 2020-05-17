@@ -61,10 +61,10 @@ class HomeViewModel(
         var gridReleases = homeFragment.root!!.findViewById<RecyclerView>(R.id.monthReleasesGridView);
 
         GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-        ) { return@GridLoadAsyncTask searchForLatestGames() }.execute()
+        ) { return@GridLoadAsyncTask searchForLatestGames() }
 
         GridLoadAsyncTask(gridReleases, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-        ) { return@GridLoadAsyncTask searchForUpcomingReleases() }.execute()
+        ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
     }
 
 }

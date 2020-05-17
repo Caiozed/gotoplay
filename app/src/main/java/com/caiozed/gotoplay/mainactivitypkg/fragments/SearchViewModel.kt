@@ -49,6 +49,6 @@ class SearchViewModel(var searchFragment: SearchFragmentBinding) : BaseObservabl
 
         GridLoadAsyncTask(
             grid, layoutManager
-        ) { return@GridLoadAsyncTask search() }.execute()
+        ) { return@GridLoadAsyncTask search() }
     }
 }

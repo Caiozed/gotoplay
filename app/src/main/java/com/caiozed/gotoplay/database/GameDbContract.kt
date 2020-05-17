@@ -52,14 +52,14 @@ class GamesDbHelper(context: Context) : SQLiteOpenHelper(context,
     fun upsert(gameDB: Game, db: SQLiteDatabase){
         db?.execSQL("INSERT OR REPLACE INTO ${GameDbContract.GameEntry.TABLE_NAME} "+
                 "(${BaseColumns._ID}, ${GameDbContract.GameEntry.IMAGE}, ${GameDbContract.GameEntry.NAME}, ${GameDbContract.GameEntry.STATUS}) "+
-                "VALUES(${gameDB.id}, '${gameDB.base64Image}', '${gameDB.name}', ${gameDB.status})")
+                "VALUES(${gameDB.id}, \"${gameDB.base64Image}\", \"${gameDB.name}\", ${gameDB.status})")
     }
 
     fun delete(gameDB: Game, db: SQLiteDatabase){
         db?.delete(GameDbContract.GameEntry.TABLE_NAME, "${BaseColumns._ID} = ?", arrayOf("${gameDB.id}"))
     }
 
-    fun findGames(status: Int, db: SQLiteDatabase, page: Int): MutableList<Game>{
+    fun findGames(status: Int, db: SQLiteDatabase, page: Int, name: String): MutableList<Game>{
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         val projection = arrayOf(
@@ -69,8 +69,12 @@ class GamesDbHelper(context: Context) : SQLiteOpenHelper(context,
             GameDbContract.GameEntry.NAME)
 
         // Filter results WHERE "title" = 'My Title'
-        val selection = "${GameDbContract.GameEntry.STATUS} = ?"
-        val selectionArgs = arrayOf("$status")
+        var selection = "${GameDbContract.GameEntry.STATUS} = ?"
+        val selectionArgs = mutableListOf<String>("$status")
+        if(!name.isNullOrEmpty()){
+            selection = "$selection AND ${GameDbContract.GameEntry.NAME} LIKE ?"
+            selectionArgs.add("%${name}%")
+        }
 
         // How you want the results sorted in the resulting Cursor
         val sortOrder = "${BaseColumns._ID} DESC "
@@ -79,7 +83,7 @@ class GamesDbHelper(context: Context) : SQLiteOpenHelper(context,
             GameDbContract.GameEntry.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
-            selectionArgs,          // The values for the WHERE clause
+            selectionArgs.toTypedArray(),          // The values for the WHERE clause
             null,                   // don't group the rows
             null,                   // don't filter by row groups
             sortOrder,

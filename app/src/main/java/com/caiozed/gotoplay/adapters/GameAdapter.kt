@@ -35,12 +35,16 @@ class GameAdapter(private var games: MutableList<Game?>?) :
     RecyclerView.Adapter<GameAdapter.GameHolder>() {
     private var VIEW_TYPE_ITEM = 0
     private var VIEW_TYPE_LOADING = 1
+    public var view: View? = null
+    public var viewParent: RecyclerView? = null
 
     open class GameHolder(private val textView: View) : RecyclerView.ViewHolder(textView)
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameAdapter.GameHolder {
         var root: View? = null
+        viewParent = parent as RecyclerView
+
         return if (viewType == VIEW_TYPE_ITEM) {
             root = LayoutInflater.from(parent.context).inflate(R.layout.game_layout, parent, false) as View
             DataViewHolder(root)
@@ -66,17 +70,17 @@ class GameAdapter(private var games: MutableList<Game?>?) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: GameHolder, position: Int) {
+        view = holder.itemView
+
         if (holder is GameAdapter.DataViewHolder) {
             val game = this.games!![position]
             holder.itemView.game_text.background = null
             holder.itemView.game_text.text = game?.name
 
             //Add image to grid
-            doAsyncMain{
-                if (game != null) {
-                    processImage(game, holder.itemView)
-                }
-            }.execute()
+            if (game != null) {
+                processImage(game, holder.itemView)
+            }
 
             if (game != null) {
                 setClickEvents(holder.itemView, game, position)
@@ -90,20 +94,18 @@ class GameAdapter(private var games: MutableList<Game?>?) :
     override fun getItemCount() = this.games?.size ?: 0
 
     public fun addItems(games: MutableList<Game>) {
+        var oldSize  = this.games?.size ?: 0
+
         this.games?.addAll(games)
-        MainActivity.instance.runOnUiThread {
-            notifyDataSetChanged()
-        }
+        notifyItemRangeInserted(oldSize,games.size)
     }
 
     public fun addNullData() {
         try{
             if(games?.size == 0 || games?.last() != null){
                 games!!.add(null)
-                MainActivity.instance.runOnUiThread {
-                    if(games?.size!! > 0) {
-                        notifyItemInserted(games!!.size)
-                    }
+                if(games?.size!! > 0) {
+                    notifyItemInserted(games!!.size)
                 }
             }
         }
@@ -116,10 +118,7 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         try {
             if(games?.size!! > 0 && games?.last() == null){
                 games?.removeAt(games?.size!! - 1)
-
-                MainActivity.instance.runOnUiThread {
-                    notifyDataSetChanged()
-                }
+                notifyItemRemoved(games?.size!! - 1)
             }
         }
         catch (e: Exception) {
@@ -176,67 +175,67 @@ class GameAdapter(private var games: MutableList<Game?>?) :
             is BacklogFragment -> {
                 view.fab_add_to_backlog.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
                 view.fab_add_to_backlog.setOnClickListener{
-                    deleteGame(game, view, position)
+                    deleteGame(game, view)
                 }
 
                 view.fab_add_to_play.setOnClickListener{
                     insertAnimation(R.id.navigation_playing)
                     updateGame(game, view, GameStatus.Playing)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
 
                 view.fab_add_to_played.setOnClickListener{
                     insertAnimation(R.id.navigation_played)
                     updateGame(game, view, GameStatus.Played)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
             }
 
             is PlayingFragment -> {
                 view.fab_add_to_play.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
                 view.fab_add_to_play.setOnClickListener{
-                    deleteGame(game, view, position)
+                    deleteGame(game, view)
                 }
 
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
 
                 view.fab_add_to_played.setOnClickListener{
                     insertAnimation(R.id.navigation_played)
                     updateGame(game, view, GameStatus.Played)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
             }
 
             is PlayedFragment -> {
                 view.fab_add_to_played.setImageDrawable(view.context.getDrawable(R.drawable.ic_delete))
                 view.fab_add_to_played.setOnClickListener{
-                    deleteGame(game, view, position)
+                    deleteGame(game, view)
                 }
 
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
 
                 view.fab_add_to_play.setOnClickListener{
                     insertAnimation(R.id.navigation_playing)
                     updateGame(game, view, GameStatus.Played)
-                    removeItem(view, position)
+                    removeItem(view, this.games!!.indexOf(game))
                 }
             }
         }
     }
 
-    private fun deleteGame(game: Game?, view: View, position: Int){
+    private fun deleteGame(game: Game?, view: View){
         if (game != null) {
             var dbContext = GamesDbHelper(view.context)
             dbContext.delete(game, dbContext.writableDatabase)
-            removeItem(view, position)
+            removeItem(view, this.games!!.indexOf(game))
         }
     }
 

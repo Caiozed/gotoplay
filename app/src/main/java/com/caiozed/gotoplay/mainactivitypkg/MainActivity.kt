@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         instance = this
-        window.statusBarColor = Color.parseColor("#80FF0000")
-        window.navigationBarColor = Color.parseColor("#BFBFBF")
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

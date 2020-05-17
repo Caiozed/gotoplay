@@ -13,24 +13,20 @@ import kotlinx.coroutines.runBlocking
 
 public class GridLoadAsyncTask (var grid: RecyclerView,
                                 var layoutManager: RecyclerView.LayoutManager,
-                                var backgroundFunc: () -> MutableList<Game>?): AsyncTask<String, String, String>() {
+                                var backgroundFunc: () -> MutableList<Game>?) {
 //    var dialog = openLoading(activity)
     private var games: MutableList<Game>? = mutableListOf()
     private var adapter: GameAdapter? = null
-    override fun onPreExecute() {
-        super.onPreExecute();
+
+    init{
+        initialize()
+    }
+
+    fun initialize() {
         adapter = GameAdapter(games as MutableList<Game?>)
         grid.layoutManager = layoutManager
         grid.swapAdapter(adapter, true)
-//        dialog.show()
-    }
-
-    override fun doInBackground(vararg params: String?): String?{
-        return run()
-    }
-
-    private fun run(): String?{
-        runCallBack()
+        adapter!!.addNullData()
 
         var scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager as LinearLayoutManager) {
             override fun onLoadMore(
@@ -38,25 +34,22 @@ public class GridLoadAsyncTask (var grid: RecyclerView,
                 totalItemsCount: Int,
                 view: RecyclerView?
             ) {
-                //Run request
-                doAsyncSecondary {
-                    runCallBack()
-                }.execute()
+                var games: MutableList<Game>? = null
+                doAsyncSecondary({
+                    games = backgroundFunc()
+                },{
+                    adapter!!.addNullData()
+                },{
+                    adapter!!.removeNull()
+                    if(games?.count()!! > 0){
+                        adapter?.addItems(games!!)
+                    }
+                }).execute()
+
             }
         }
 
         grid.addOnScrollListener(scrollListener)
-        return  null
-    }
-
-    private fun runCallBack(){
-        adapter!!.addNullData()
-
-        games = backgroundFunc()
-        adapter!!.removeNull()
-
-        if(games?.count()!! > 0){
-            adapter?.addItems(games!!)
-        }
+//        dialog.show()
     }
 }

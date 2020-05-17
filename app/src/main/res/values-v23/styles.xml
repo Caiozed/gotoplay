@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">#80FF0000</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
+        <item name="floatingActionButtonStyle">@style/fab_style</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="bottomSheetDialogTheme">@style/bottom_sheet_style</item>
+    </style>
+</resources>

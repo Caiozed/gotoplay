@@ -1,5 +1,6 @@
 package com.caiozed.gotoplay.mainactivitypkg.fragments
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.databinding.SearchFragmentBinding
+import com.caiozed.gotoplay.mainactivitypkg.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -58,5 +60,12 @@ class SearchFragment : BottomSheetDialogFragment() {
             bottomSheetBehavior!!.peekHeight = view.measuredHeight - 30
             parent.setBackgroundColor(Color.TRANSPARENT)
         }
+        MainActivity.instance.window.navigationBarColor = Color.BLACK
+
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        MainActivity.instance.window.navigationBarColor = Color.WHITE
+        super.onCancel(dialog)
     }
 }

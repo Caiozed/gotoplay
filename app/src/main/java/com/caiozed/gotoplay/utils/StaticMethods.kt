@@ -34,32 +34,20 @@ class doAsyncMain(val handler: () -> Unit) : AsyncTask<Void, Void, String>() {
         })
         return null;
     }
-
-    override fun onPreExecute() {
-        super.onPreExecute()
-        // ...
-    }
-
-    override fun onPostExecute(result: String?) {
-        super.onPostExecute(result)
-        // ...
-    }
 }
 
-class doAsyncSecondary(val handler: () -> Unit) : AsyncTask<Void, Void, String>() {
+class doAsyncSecondary(val handler: () -> Unit, val preHandler: () -> Unit, val postHandler: () -> Unit) : AsyncTask<Void, Void, String>() {
     override fun doInBackground(vararg params: Void?): String? {
         handler()
         return null;
     }
 
     override fun onPreExecute() {
-        super.onPreExecute()
-        // ...
+        preHandler()
     }
 
     override fun onPostExecute(result: String?) {
-        super.onPostExecute(result)
-        // ...
+        postHandler()
     }
 }
 
