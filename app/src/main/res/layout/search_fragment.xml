@@ -12,57 +12,54 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_container"
         android:layout_width="match_parent"
+        android:background="@drawable/shadow_bg"
         android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="15dp"
-            app:cardUseCompatPadding="true"
+            android:orientation="vertical"
+            android:padding="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_line"
+                android:layout_gravity="center"
+                />
 
-                <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <EditText
+                    android:id="@+id/editText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    app:cardCornerRadius="15dp"
-                    app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_height="match_parent"
+                    android:background="#00FFFFFF"
+                    android:drawableEnd="@drawable/ic_search_box"
+                    android:ems="10"
+                    android:inputType="textNoSuggestions"
+                    android:padding="10dp"
+                    android:text="@={viewModel.searchString}" />
+            </androidx.cardview.widget.CardView>
 
-                    <EditText
-                        android:id="@+id/editText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#00FFFFFF"
-                        android:drawableEnd="@drawable/ic_search"
-                        android:ems="10"
-                        android:inputType="textNoSuggestions"
-                        android:padding="10dp"
-                        android:text="@={viewModel.searchString}" />
-                </androidx.cardview.widget.CardView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/resultsGridView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="200dp"
+                tools:listitem="@layout/game_layout" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/resultsGridView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="200dp"
-                    tools:listitem="@layout/game_layout" />
+        </LinearLayout>
 
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

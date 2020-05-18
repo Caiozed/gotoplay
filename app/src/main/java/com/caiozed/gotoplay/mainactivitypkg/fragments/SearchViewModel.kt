@@ -35,9 +35,8 @@ class SearchViewModel(var searchFragment: SearchFragmentBinding) : BaseObservabl
     private fun search(): MutableList<Game>? {
         var games: MutableList<Game>? = null
             games = IGDBService.getGames(
-                """fields name, id, cover, rating; search "$searchString"; limit 10; offset ${page * 10};"""
+                """fields name, id, cover.url, cover.image_id, rating; search "$searchString"; limit 10; offset ${page * 10};"""
             )
-            games = games?.let { IGDBService.findCovers(it) }
         page++
         return games
     }

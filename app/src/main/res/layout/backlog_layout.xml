@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#00FFFFFF"
-                    android:drawableEnd="@drawable/ic_search"
+                    android:drawableEnd="@drawable/ic_search_box"
                     android:ems="10"
                     android:inputType="textNoSuggestions"
                     android:padding="10dp"

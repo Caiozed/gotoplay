@@ -16,8 +16,9 @@ class HomeViewModel(
     var homeFragment: HomeFragmentBinding
 ) : BaseObservable() {
 
-    var latestPage: Int = 0
+    var popularPage: Int = 0
     var upComingPage: Int = 0
+    var latestPage: Int = 0
 
     @get:Bindable
     var games: MutableList<Game>? = null
@@ -29,42 +30,59 @@ class HomeViewModel(
 
     private fun searchForLatestGames(): MutableList<Game>?{
         games = IGDBService.getGames(
-            """fields name, id, cover, rating;
+            """fields name, id, cover.url, cover.image_id, rating;
                 sort popularity desc;
                 limit 10;
-                offset ${latestPage * 10};"""
+                offset ${popularPage * 10};"""
         )
 
-        games = IGDBService.findCovers(games!!)
-        latestPage++
+        popularPage++
         return games
     }
 
 
     private fun searchForUpcomingReleases(): MutableList<Game>?{
         games = IGDBService.getGames(
-            """fields *; 
+            """fields name, id, cover.url, cover.image_id, rating;
                 where first_release_date >= ${  System.currentTimeMillis() / 1000 };
-                sort first_release_date;
+                sort first_release_date desc;
                 limit 10;
                 offset ${upComingPage * 10};
                 """
         )
 
-        games = IGDBService.findCovers(games!!)
         upComingPage++
         return games
     }
 
-    fun startSearch(context: Context) {
-        var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestGridView);
-        var gridReleases = homeFragment.root!!.findViewById<RecyclerView>(R.id.monthReleasesGridView);
 
-        GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+    private fun searchForLatestReleases(): MutableList<Game>?{
+        games = IGDBService.getGames(
+            """fields name, id, cover.url, cover.image_id, rating;
+                where first_release_date <= ${  System.currentTimeMillis() / 1000 };
+                sort first_release_date desc;
+                limit 10;
+                offset ${latestPage * 10};
+                """
+        )
+
+        latestPage++
+        return games
+    }
+
+    fun startSearch(context: Context) {
+        var gridPopular = homeFragment.root!!.findViewById<RecyclerView>(R.id.popularGridView);
+        var gridUpcoming = homeFragment.root!!.findViewById<RecyclerView>(R.id.upcomingReleasesGridView);
+        var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
+
+        GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
         ) { return@GridLoadAsyncTask searchForLatestGames() }
 
-        GridLoadAsyncTask(gridReleases, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
         ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
+
+        GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        ) { return@GridLoadAsyncTask searchForLatestReleases() }
     }
 
 }

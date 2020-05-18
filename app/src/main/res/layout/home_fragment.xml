@@ -24,32 +24,99 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+<!-- MOST POPULAR-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/most_popular" />
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:maxWidth="50dp"
+                        app:srcCompat="@drawable/ic_popular" />
 
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/most_popular"
+                        android:textAllCaps="false"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/latestGridView"
+                    android:id="@+id/popularGridView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="200dp"
+                    android:layout_marginBottom="20dp"
                     tools:listitem="@layout/game_layout" />
 
-                <TextView
-                    android:id="@+id/textView"
+                <!--UPCOMING RELEASES-->
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upcoming_releases" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:maxWidth="50dp"
+                        app:srcCompat="@drawable/ic_upcoming" />
 
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/upcoming_releases"
+                        android:textAllCaps="false"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/monthReleasesGridView"
+                    android:id="@+id/upcomingReleasesGridView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="200dp"
+                    android:layout_marginBottom="20dp"
+                    tools:listitem="@layout/game_layout" />
+
+<!--                LATEST RELEASES-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:maxWidth="50dp"
+                        app:srcCompat="@drawable/ic_latest" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/latest_releases"
+                        android:textAllCaps="false"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/latestReleasesGridView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="200dp"
+                    android:layout_marginBottom="20dp"
                     tools:listitem="@layout/game_layout" />
             </LinearLayout>
         </ScrollView>

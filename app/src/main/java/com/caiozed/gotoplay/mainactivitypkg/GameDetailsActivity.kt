@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.BR
 import com.caiozed.gotoplay.databinding.GameDetailsLayoutBinding
+import com.caiozed.gotoplay.mainactivitypkg.fragments.GameDetailsModalFragment
 import com.caiozed.gotoplay.models.Game
 
 class GameDetailsActivity : AppCompatActivity() {
@@ -21,6 +22,10 @@ class GameDetailsActivity : AppCompatActivity() {
 
         var viewModel = GameDetailsViewModel(this)
         viewModel.game = game
+
+        var modalFragment = GameDetailsModalFragment(viewModel.game!!, this)
+        modalFragment.show(supportFragmentManager,
+            "add_search_dialog_fragment");
 
         binding.setVariable(BR.viewModel, viewModel)
     }

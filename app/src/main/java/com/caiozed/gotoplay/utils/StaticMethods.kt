@@ -4,6 +4,7 @@ import android.app.ActionBar
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Base64
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.caiozed.gotoplay.models.Game
@@ -20,6 +22,9 @@ import kotlinx.android.synthetic.main.game_layout.view.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 enum class GameStatus (val value: Int){
     Backlog(0),
@@ -81,12 +86,18 @@ fun convertFromBase64String(base64: String): Drawable?{
     return ret
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun convertTimestampToString(time: Long): String{
+   return Instant.ofEpochSecond(time)
+       .atZone(ZoneId.systemDefault())
+       .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")).toString()
+}
 
 fun processImage(game: Game, view: View){
     var img = ImageView(view.context)
     if(game?.base64Image.isNullOrEmpty()){
         Picasso.get()
-            .load("https://images.igdb.com/igdb/image/upload/t_720p/${game?.coverData?.image_id}.jpg")
+            .load("https://images.igdb.com/igdb/image/upload/t_720p/${game?.cover?.image_id}.jpg")
             //.placeholder(TextDrawable(game.name))
             //.error(TextDrawable(game.name))
             .into(img,

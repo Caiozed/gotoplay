@@ -97,8 +97,9 @@ class GamesDbHelper(context: Context) : SQLiteOpenHelper(context,
                 val status = getInt(getColumnIndexOrThrow(GameDbContract.GameEntry.STATUS))
                 val id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
                 val name = getString(getColumnIndexOrThrow(GameDbContract.GameEntry.NAME))
-                var game = Game(id = id, category = 0, created_at =  0, updated_at = 0, name = name, summary =  "", slug =  "",  rating = 0f, url = "",  cover = 0 )
+                var game = Game(id = id, name = name)
                 game.base64Image = image
+                game.status = status
                 games.add(game)
             }
         }
