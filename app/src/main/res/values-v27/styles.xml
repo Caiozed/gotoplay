@@ -12,14 +12,5 @@
         <item name="floatingActionButtonStyle">@style/fab_style</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowLightStatusBar">true</item>
-
-        <item name="bottomSheetDialogTheme">@style/bottom_sheet_style</item>
-    </style>
-
-    <style name="bottom_sheet_style" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="android:background">@drawable/rounded_dialog</item>
-        <item name="android:windowLightNavigationBar">false</item>
-        <!--        <item name="color">#FF0D0D</item>-->
-        <!--        <item name="colorOnPrimary">#C8FF0000</item>-->
     </style>
 </resources>

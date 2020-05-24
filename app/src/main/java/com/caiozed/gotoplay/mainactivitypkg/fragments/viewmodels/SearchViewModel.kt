@@ -1,4 +1,4 @@
-package com.caiozed.gotoplay.mainactivitypkg.fragments
+package com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels
 
 import android.os.AsyncTask
 import androidx.databinding.BaseObservable

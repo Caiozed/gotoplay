@@ -8,6 +8,7 @@ import com.caiozed.gotoplay.BR
 import com.caiozed.gotoplay.databinding.GameDetailsLayoutBinding
 import com.caiozed.gotoplay.mainactivitypkg.fragments.GameDetailsModalFragment
 import com.caiozed.gotoplay.models.Game
+import com.caiozed.gotoplay.utils.doAsyncSecondary
 
 class GameDetailsActivity : AppCompatActivity() {
 
@@ -30,3 +31,4 @@ class GameDetailsActivity : AppCompatActivity() {
         binding.setVariable(BR.viewModel, viewModel)
     }
 }
+

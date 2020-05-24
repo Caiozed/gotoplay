@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.caiozed.gotoplay.mainactivitypkg.fragments.SearchViewModel" />
+            type="com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

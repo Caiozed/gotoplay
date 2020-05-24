@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.databinding.SearchFragmentBinding
 import com.caiozed.gotoplay.mainactivitypkg.MainActivity
+import com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels.SearchViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class SearchFragment : BottomSheetDialogFragment() {
+    var previousFragment: Fragment? = null
 
     companion object {
         fun newInstance() = SearchFragment()
@@ -28,10 +31,14 @@ class SearchFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         var binding = DataBindingUtil.inflate<SearchFragmentBinding>(inflater, R.layout.search_fragment, container, false)
-        var viewModel = SearchViewModel(binding)
+        var viewModel =
+            SearchViewModel(
+                binding
+            )
 
         binding.viewModel = viewModel
-
+        previousFragment = MainActivity.instance.currentFragment
+        MainActivity.instance.currentFragment = this
         return binding.root
     }
 
@@ -65,6 +72,7 @@ class SearchFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCancel(dialog: DialogInterface) {
+        MainActivity.instance.currentFragment = previousFragment
         MainActivity.instance.window.navigationBarColor = Color.WHITE
         super.onCancel(dialog)
     }

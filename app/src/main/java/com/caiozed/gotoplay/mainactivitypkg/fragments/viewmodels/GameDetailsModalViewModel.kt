@@ -1,5 +1,6 @@
-package com.caiozed.gotoplay.mainactivitypkg.fragments
+package com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels
 
+import android.opengl.Visibility
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -14,6 +15,7 @@ import com.caiozed.gotoplay.utils.IGDBService
 import com.caiozed.gotoplay.utils.convertTimestampToString
 import com.caiozed.gotoplay.utils.doAsyncSecondary
 import kotlinx.android.synthetic.main.game_details_modal.view.*
+import kotlinx.android.synthetic.main.progress_bar.view.*
 
 class GameDetailsModalViewModel(var view: View) : BaseObservable() {
     @get:Bindable
@@ -30,6 +32,7 @@ class GameDetailsModalViewModel(var view: View) : BaseObservable() {
         var adapter = ImageAdapter(screenShots)
         view.screeshots_grid.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL ,false)
         view.screeshots_grid.adapter = adapter
+        view.game_details_scrollview.visibility = View.INVISIBLE
 
         doAsyncSecondary({
             gameFound = IGDBService.getGames(
@@ -45,9 +48,10 @@ class GameDetailsModalViewModel(var view: View) : BaseObservable() {
             """
             )?.first()
         }, {
-
-
+            view.progress_bar_indefinite.visibility = View.VISIBLE
         }, {
+            view.progress_bar_indefinite.visibility = View.INVISIBLE
+            view.game_details_scrollview.visibility = View.VISIBLE
 
             game = gameFound ?: game
             game?.releaseDate = convertTimestampToString(game?.first_release_date ?: 0)

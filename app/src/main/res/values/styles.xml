@@ -7,11 +7,10 @@
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">#80FF0000</item>
 
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
         <item name="floatingActionButtonStyle">@style/fab_style</item>
-
-        <item name="bottomSheetDialogTheme">@style/bottom_sheet_style</item>
     </style>
 
     <style name="fab_style" parent="Widget.Design.FloatingActionButton">
@@ -25,12 +24,6 @@
 
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
         <item name="colorPrimary">#FFFFFF</item>
-    </style>
-
-    <style name="bottom_sheet_style" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="android:background">@drawable/rounded_dialog</item>
-<!--        <item name="color">#FF0D0D</item>-->
-<!--        <item name="colorOnPrimary">#C8FF0000</item>-->
     </style>
 
 </resources>

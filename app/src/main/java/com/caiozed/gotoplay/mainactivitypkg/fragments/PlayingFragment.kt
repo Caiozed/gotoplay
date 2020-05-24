@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.caiozed.gotoplay.R
-import com.caiozed.gotoplay.databinding.BacklogLayoutBinding
 import com.caiozed.gotoplay.databinding.PlayingLayoutBinding
+import com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels.PlayingViewModel
 
 class PlayingFragment : Fragment() {
     companion object {
@@ -21,7 +21,10 @@ class PlayingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         var binding = DataBindingUtil.inflate<PlayingLayoutBinding>(inflater, R.layout.playing_layout, container, false)
-        var viewModel = PlayingViewModel(binding)
+        var viewModel =
+            PlayingViewModel(
+                binding
+            )
 
         binding.viewModel = viewModel
         viewModel.startSearch()

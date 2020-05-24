@@ -9,7 +9,7 @@ class IGDBService {
     companion object {
         lateinit var instance: IGDBService
 
-        var userKey = "319ac2d1e830a8bb29d2a449a4a141d8"
+        var userKey = ""
         var games = "https://api-v3.igdb.com/games/"
         var covers = "https://api-v3.igdb.com/covers/"
         var search = "https://api-v3.igdb.com/search/"

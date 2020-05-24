@@ -11,7 +11,5 @@
         <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
         <item name="floatingActionButtonStyle">@style/fab_style</item>
         <item name="android:windowLightStatusBar">true</item>
-
-        <item name="bottomSheetDialogTheme">@style/bottom_sheet_style</item>
     </style>
 </resources>

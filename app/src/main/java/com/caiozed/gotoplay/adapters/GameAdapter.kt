@@ -20,10 +20,7 @@ import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.database.GamesDbHelper
 import com.caiozed.gotoplay.mainactivitypkg.GameDetailsActivity
 import com.caiozed.gotoplay.mainactivitypkg.MainActivity
-import com.caiozed.gotoplay.mainactivitypkg.fragments.BacklogFragment
-import com.caiozed.gotoplay.mainactivitypkg.fragments.HomeFragment
-import com.caiozed.gotoplay.mainactivitypkg.fragments.PlayedFragment
-import com.caiozed.gotoplay.mainactivitypkg.fragments.PlayingFragment
+import com.caiozed.gotoplay.mainactivitypkg.fragments.*
 import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.utils.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -151,11 +148,12 @@ class GameAdapter(private var games: MutableList<Game?>?) :
                 Pair.create<View, String>(view.game_container, containerStr))
 
             intent.putExtra("game", game as Serializable)
-            MainActivity.instance.startActivity(intent, options.toBundle())
+            view.context.startActivity(intent, options.toBundle())
         };
 
         when(MainActivity.instance.currentFragment){
-            is HomeFragment ->{
+            is HomeFragment,
+            is SearchFragment -> {
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)

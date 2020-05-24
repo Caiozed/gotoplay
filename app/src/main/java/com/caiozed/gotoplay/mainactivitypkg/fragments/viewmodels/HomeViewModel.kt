@@ -1,4 +1,4 @@
-package com.caiozed.gotoplay.mainactivitypkg.fragments
+package com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels
 
 import android.content.Context
 import androidx.databinding.BaseObservable
@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.caiozed.gotoplay.BR
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.databinding.HomeFragmentBinding
+import com.caiozed.gotoplay.mainactivitypkg.MainActivity
+import com.caiozed.gotoplay.mainactivitypkg.fragments.ApiKeyFragment
 import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.utils.GridLoadAsyncTask
 import com.caiozed.gotoplay.utils.IGDBService
@@ -71,18 +73,23 @@ class HomeViewModel(
     }
 
     fun startSearch(context: Context) {
-        var gridPopular = homeFragment.root!!.findViewById<RecyclerView>(R.id.popularGridView);
-        var gridUpcoming = homeFragment.root!!.findViewById<RecyclerView>(R.id.upcomingReleasesGridView);
-        var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
+        if(IGDBService.userKey.isNullOrEmpty()){
+            MainActivity.instance.openDialog(ApiKeyFragment() ,{}, cancelable = false);
+        }else{
 
-        GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-        ) { return@GridLoadAsyncTask searchForLatestGames() }
+            var gridPopular = homeFragment.root!!.findViewById<RecyclerView>(R.id.popularGridView);
+            var gridUpcoming = homeFragment.root!!.findViewById<RecyclerView>(R.id.upcomingReleasesGridView);
+            var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
 
-        GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-        ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
+            GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+            ) { return@GridLoadAsyncTask searchForLatestGames() }
 
-        GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-        ) { return@GridLoadAsyncTask searchForLatestReleases() }
+            GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+            ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
+
+            GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+            ) { return@GridLoadAsyncTask searchForLatestReleases() }
+        }
     }
 
 }

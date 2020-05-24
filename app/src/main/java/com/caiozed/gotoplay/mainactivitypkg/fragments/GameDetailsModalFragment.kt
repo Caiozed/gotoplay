@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.databinding.GameDetailsModalBinding
 import com.caiozed.gotoplay.mainactivitypkg.GameDetailsActivity
+import com.caiozed.gotoplay.mainactivitypkg.fragments.viewmodels.GameDetailsModalViewModel
 import com.caiozed.gotoplay.models.Game
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,7 +26,10 @@ class GameDetailsModalFragment(var game: Game, var parentView: GameDetailsActivi
         savedInstanceState: Bundle?
     ): View? {
         var binding = DataBindingUtil.inflate<GameDetailsModalBinding>(inflater, R.layout.game_details_modal, container, false)
-        var viewModel = GameDetailsModalViewModel(binding.root)
+        var viewModel =
+            GameDetailsModalViewModel(
+                binding.root
+            )
         viewModel.game = game
 
         binding.viewModel = viewModel
@@ -64,7 +68,7 @@ class GameDetailsModalFragment(var game: Game, var parentView: GameDetailsActivi
     }
 
     override fun onCancel(dialog: DialogInterface) {
-        parentView.finish()
+        parentView.finishAfterTransition()
         super.onCancel(dialog)
     }
 }
