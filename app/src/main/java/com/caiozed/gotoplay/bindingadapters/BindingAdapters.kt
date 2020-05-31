@@ -13,6 +13,8 @@ import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.utils.convertFromBase64String
 import com.caiozed.gotoplay.utils.convertToBase64String
 import com.caiozed.gotoplay.utils.processImage
+import com.caiozed.gotoplay.utils.watchYoutubeVideo
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.game_layout.view.*

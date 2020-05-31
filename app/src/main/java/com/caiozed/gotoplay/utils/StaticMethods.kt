@@ -1,8 +1,12 @@
 package com.caiozed.gotoplay.utils
 
 import android.app.ActionBar
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Handler
@@ -127,5 +131,15 @@ fun processImage(game: Game, view: View){
                 it
             )
         }
+    }
+}
+
+public fun watchYoutubeVideo(context: Context, id: String){
+    var appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"));
+    var webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=$id"));
+    try {
+        context.startActivity(appIntent);
+    } catch (ex: ActivityNotFoundException) {
+        context.startActivity(webIntent);
     }
 }
