@@ -3,10 +3,6 @@
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#FFFFFF</item>
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorAccent">#80FF0000</item>
-
         <item name="android:windowActivityTransitions">true</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationView</item>
         <item name="floatingActionButtonStyle">@style/fab_style</item>

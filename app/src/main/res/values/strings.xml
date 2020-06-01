@@ -6,5 +6,6 @@
     <string name="game_transition">game_transition</string>
     <string name="game_transition2">game_transition2</string>
     <string name="latest_releases">Latest Releases</string>
+    <string name="screenshot_transition">screenshot_transition</string>
 
 </resources>

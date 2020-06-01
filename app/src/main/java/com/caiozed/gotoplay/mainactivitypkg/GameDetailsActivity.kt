@@ -1,5 +1,6 @@
 package com.caiozed.gotoplay.mainactivitypkg
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -22,7 +23,8 @@ class GameDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val game = intent.extras?.get("game") as Game
-
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
         binding = DataBindingUtil
             .setContentView<GameDetailsLayoutBinding>(this,
                 R.layout.game_details_layout
@@ -42,10 +44,9 @@ class GameDetailsActivity : AppCompatActivity() {
         var botomSheet = findViewById<View>(R.id.bottom_sheet_container)
 
         var sheetBehavior = BottomSheetBehavior.from(botomSheet);
-        sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         binding!!.root!!.post(Runnable {
-            sheetBehavior!!.peekHeight = binding!!.root!!.measuredHeight/2
+            sheetBehavior!!.peekHeight = binding!!.root!!.measuredHeight/3
         })
 
             sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {

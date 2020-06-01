@@ -1,6 +1,7 @@
 package com.caiozed.gotoplay.adapters
 
 import android.app.ActionBar
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipData
 import android.content.Context
@@ -15,10 +16,12 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.database.GamesDbHelper
 import com.caiozed.gotoplay.mainactivitypkg.GameDetailsActivity
+import com.caiozed.gotoplay.mainactivitypkg.ImageViewActivity
 import com.caiozed.gotoplay.mainactivitypkg.MainActivity
 import com.caiozed.gotoplay.mainactivitypkg.fragments.BacklogFragment
 import com.caiozed.gotoplay.mainactivitypkg.fragments.HomeFragment
@@ -29,6 +32,7 @@ import com.caiozed.gotoplay.models.Image
 import com.caiozed.gotoplay.utils.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.game_layout.view.*
+import kotlinx.android.synthetic.main.image_layout.view.*
 import java.io.Serializable
 import android.R as AndroidR
 
@@ -78,7 +82,19 @@ class ImageAdapter(private var images: MutableList<Image?>?) :
 
             //Add image to grid
             if (image != null) {
-                processImage(Game(0, "", cover = image), holder.itemView)
+                processImage(Game(0, "", cover = image), holder.itemView.game_image)
+            }
+
+            var imageView = view!!.findViewById<ImageView>(R.id.game_image)
+            view!!.game_image?.setOnClickListener {
+                var intent = Intent(view!!.context, ImageViewActivity::class.java)
+                var containerStr = view!!.context.getString(R.string.screenshot_transition)
+
+                var options = ActivityOptions.makeSceneTransitionAnimation(view!!.context as Activity,
+                    Pair.create<View, String>(imageView, containerStr))
+
+                intent.putExtra("image", image as Serializable)
+                view!!.context.startActivity(intent, options.toBundle())
             }
         } else { //Do whatever you want. Or nothing !!
         }

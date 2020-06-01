@@ -17,13 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/game_text"
+        <ImageView
+            android:id="@+id/game_image"
             android:layout_width="200dp"
             android:layout_height="120dp"
+            android:transitionName="@string/screenshot_transition"
             android:width="200dp"
             android:height="120dp"
             android:gravity="center"
+            android:scaleType="fitXY"
             android:textColor="#7A7A7A"
             android:textSize="25dp" />
 

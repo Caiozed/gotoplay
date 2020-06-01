@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
@@ -99,6 +100,10 @@ fun convertTimestampToString(time: Long): String{
 
 fun processImage(game: Game, view: View){
     var img = ImageView(view.context)
+    if(view is ImageView){
+        img = view
+    }
+
     if(game?.base64Image.isNullOrEmpty()){
         Picasso.get()
             .load("https://images.igdb.com/igdb/image/upload/t_720p/${game?.cover?.image_id}.jpg")
@@ -108,13 +113,17 @@ fun processImage(game: Game, view: View){
                 object: Callback {
                     override fun onSuccess() {
                         //set animations here
-                        view.game_text.text = "";
-                        if (game != null) {
-                            game.base64Image = convertToBase64String(img.drawable.toBitmap())
-                            view.game_text.background = game.base64Image?.let {
-                                convertFromBase64String(
-                                    it
-                                )
+                        when(view){
+                            is TextView -> {
+                                view.text = "";
+                                if (game != null) {
+                                    game.base64Image = convertToBase64String(img.drawable.toBitmap())
+                                    view.game_text.background = game.base64Image?.let {
+                                        convertFromBase64String(
+                                            it
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

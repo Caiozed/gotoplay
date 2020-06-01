@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.database.GamesDbHelper
@@ -49,7 +50,6 @@ class GameAdapter(private var games: MutableList<Game?>?) :
             root = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false) as View
             ProgressViewHolder(root)
         }
-
         return GameHolder(root!!)
     }
     internal inner class DataViewHolder(itemView: View?) :
@@ -76,11 +76,11 @@ class GameAdapter(private var games: MutableList<Game?>?) :
 
             //Add image to grid
             if (game != null) {
-                processImage(game, holder.itemView)
+                processImage(game, holder.itemView.game_text)
             }
 
             if (game != null) {
-                setClickEvents(holder.itemView, game, position)
+                setClickEvents(holder.itemView, game)
             }
 
         } else { //Do whatever you want. Or nothing !!
@@ -123,7 +123,8 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         }
     }
 
-    private fun removeItem (view: View, position: Int){
+    private fun removeItem (view: View, game: Game){
+
         val anim: Animation = AnimationUtils.loadAnimation(
             view.context,
             AndroidR.anim.fade_out
@@ -131,21 +132,25 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         anim.duration = 300
         view.startAnimation(anim)
 
-        Handler().postDelayed(Runnable {
-            games?.removeAt(position)
+        view.postDelayed(Runnable {
+            var position = this.games!!.indexOf(game)
+            games?.remove(game)
             notifyItemRemoved(position) //Refresh list
         }, anim.duration)
     }
 
 
-    private fun setClickEvents(view: View, game: Game, position: Int){
+    private fun setClickEvents(view: View, game: Game){
+        viewParent!!.setHasFixedSize(true);//Fix for data not updating
+        var container = view.findViewById<CardView>(R.id.game_container)
+
         //Add click event to image container
         view.game_text.setOnClickListener {
             var intent = Intent(view.context, GameDetailsActivity::class.java)
             var containerStr = view.context.getString(R.string.game_transition)
 
             var options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.instance,
-                Pair.create<View, String>(view.game_container, containerStr))
+                Pair.create<View, String>(container, containerStr))
 
             intent.putExtra("game", game as Serializable)
             view.context.startActivity(intent, options.toBundle())
@@ -154,6 +159,7 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         when(MainActivity.instance.currentFragment){
             is HomeFragment,
             is SearchFragment -> {
+                viewParent!!.setHasFixedSize(false);//Remove Fix for horizontal lists
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)
@@ -179,13 +185,13 @@ class GameAdapter(private var games: MutableList<Game?>?) :
                 view.fab_add_to_play.setOnClickListener{
                     insertAnimation(R.id.navigation_playing)
                     updateGame(game, view, GameStatus.Playing)
-                    removeItem(view, this.games!!.indexOf(game))
+                    removeItem(view, game)
                 }
 
                 view.fab_add_to_played.setOnClickListener{
                     insertAnimation(R.id.navigation_played)
                     updateGame(game, view, GameStatus.Played)
-                    removeItem(view, this.games!!.indexOf(game))
+                    removeItem(view, game)
                 }
             }
 
@@ -198,13 +204,13 @@ class GameAdapter(private var games: MutableList<Game?>?) :
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)
-                    removeItem(view, this.games!!.indexOf(game))
+                    removeItem(view, game)
                 }
 
                 view.fab_add_to_played.setOnClickListener{
                     insertAnimation(R.id.navigation_played)
                     updateGame(game, view, GameStatus.Played)
-                    removeItem(view, this.games!!.indexOf(game))
+                    removeItem(view, game)
                 }
             }
 
@@ -217,13 +223,13 @@ class GameAdapter(private var games: MutableList<Game?>?) :
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)
-                    removeItem(view, this.games!!.indexOf(game))
+                    removeItem(view, game)
                 }
 
                 view.fab_add_to_play.setOnClickListener{
                     insertAnimation(R.id.navigation_playing)
-                    updateGame(game, view, GameStatus.Played)
-                    removeItem(view, this.games!!.indexOf(game))
+                    updateGame(game, view, GameStatus.Playing)
+                    removeItem(view, game)
                 }
             }
         }
@@ -233,7 +239,7 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         if (game != null) {
             var dbContext = GamesDbHelper(view.context)
             dbContext.delete(game, dbContext.writableDatabase)
-            removeItem(view, this.games!!.indexOf(game))
+            removeItem(view, game)
         }
     }
 

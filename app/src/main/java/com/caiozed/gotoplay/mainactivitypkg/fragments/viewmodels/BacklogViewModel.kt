@@ -38,7 +38,6 @@ class BacklogViewModel(var view: BacklogLayoutBinding): BaseObservable(){
     fun startSearch(name: String = "") {
         var grid = view.root!!.findViewById<RecyclerView>(R.id.backlog_grid);
         page = 0
-
         GridLoadAsyncTask(grid, GridLayoutManager(view.root!!.context, 2)
         ) { return@GridLoadAsyncTask searchDatabase() }
     }

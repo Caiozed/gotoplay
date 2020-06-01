@@ -59,9 +59,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
+                        android:textColor="@color/colorPrimaryDark"
                         android:ems="10"
                         android:text="@{viewModel.game.name}"
-                        android:textSize="20dp"
+                        android:textSize="25dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -73,18 +74,8 @@
                         android:ems="10"
                         android:inputType="textNoSuggestions"
                         android:text="@{viewModel.game.releaseDate}"
-                        android:textSize="15dp" />
-
-
-                    <TextView
-                        android:id="@+id/platforms_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#00FFFFFF"
-                        android:ems="10"
-                        android:text="Platforms"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/details_content_size"
+                        />
 
                     <ScrollView
                         android:layout_width="wrap_content"
@@ -103,9 +94,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
+                        android:textColor="@color/colorPrimaryDark"
                         android:ems="10"
                         android:text="Genres"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/details_label_size"
                         android:textStyle="bold" />
 
                     <ScrollView
@@ -125,9 +117,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
+                        android:textColor="@color/colorPrimaryDark"
                         android:ems="10"
                         android:text="Scheenshots"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/details_label_size"
                         android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -142,9 +135,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
+                        android:textColor="@color/colorPrimaryDark"
                         android:ems="10"
                         android:text="Summary"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/details_label_size"
                         android:textStyle="bold" />
 
                     <TextView
@@ -154,16 +148,18 @@
                         android:layout_marginBottom="5dp"
                         android:background="#00FFFFFF"
                         android:text="@{viewModel.game.summary}"
-                        android:textSize="17dp" />
+                        android:textSize="@dimen/details_content_size"
+                        />
 
                     <TextView
                         android:id="@+id/story_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
+                        android:textColor="@color/colorPrimaryDark"
                         android:ems="10"
                         android:text="Story"
-                        android:textSize="20dp"
+                        android:textSize="@dimen/details_label_size"
                         android:textStyle="bold" />
 
                     <TextView
@@ -172,7 +168,9 @@
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
                         android:text="@{viewModel.game.storyline}"
-                        android:textSize="17dp" />
+                        android:textSize="@dimen/details_content_size"
+                        android:layout_marginBottom="50dp"
+                        />
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

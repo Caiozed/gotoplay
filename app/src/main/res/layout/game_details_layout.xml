@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="5dp"
+            app:fabCustomSize="30dp"
             android:backgroundTint="#C6FFFFFF"
             android:onClick="@{() -> viewModel.openVideo()}"
             android:visibility="@{viewModel.game.videos != null ? View.VISIBLE : View.INVISIBLE}"
