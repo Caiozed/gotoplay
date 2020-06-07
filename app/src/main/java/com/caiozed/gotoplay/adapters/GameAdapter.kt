@@ -102,7 +102,9 @@ class GameAdapter(private var games: MutableList<Game?>?) :
             if(games?.size == 0 || games?.last() != null){
                 games!!.add(null)
                 if(games?.size!! > 0) {
-                    notifyItemInserted(games!!.size)
+                    games?.let {
+                        notifyItemInserted(games!!.size)
+                    }
                 }
             }
         }
@@ -141,7 +143,7 @@ class GameAdapter(private var games: MutableList<Game?>?) :
 
 
     private fun setClickEvents(view: View, game: Game){
-        viewParent!!.setHasFixedSize(true);//Fix for data not updating
+        viewParent?.setHasFixedSize(true);//Fix for data not updating
         var container = view.findViewById<CardView>(R.id.game_container)
 
         //Add click event to image container
@@ -159,7 +161,7 @@ class GameAdapter(private var games: MutableList<Game?>?) :
         when(MainActivity.instance.currentFragment){
             is HomeFragment,
             is SearchFragment -> {
-                viewParent!!.setHasFixedSize(false);//Remove Fix for horizontal lists
+                viewParent?.setHasFixedSize(false);//Remove Fix for horizontal lists
                 view.fab_add_to_backlog.setOnClickListener{
                     insertAnimation(R.id.navigation_backlog)
                     updateGame(game, view, GameStatus.Backlog)

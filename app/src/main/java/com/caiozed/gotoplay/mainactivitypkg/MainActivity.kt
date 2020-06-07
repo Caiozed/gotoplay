@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         instance = this
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE

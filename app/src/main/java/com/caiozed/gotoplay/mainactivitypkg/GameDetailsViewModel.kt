@@ -8,20 +8,17 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.BR
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.adapters.ImageAdapter
+import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.models.Image
 import com.caiozed.gotoplay.utils.IGDBService
 import com.caiozed.gotoplay.utils.convertTimestampToString
 import com.caiozed.gotoplay.utils.doAsyncSecondary
 import com.caiozed.gotoplay.utils.watchYoutubeVideo
-import kotlinx.android.synthetic.main.game_details_layout.*
 import kotlinx.android.synthetic.main.game_details_modal.*
-import kotlinx.android.synthetic.main.game_details_modal.view.*
 import kotlinx.android.synthetic.main.progress_bar.*
-import kotlinx.android.synthetic.main.progress_bar.view.*
 import kotlinx.android.synthetic.main.tag_layout.view.*
 
 class GameDetailsViewModel(var view: GameDetailsActivity) : BaseObservable() {
@@ -67,14 +64,14 @@ class GameDetailsViewModel(var view: GameDetailsActivity) : BaseObservable() {
             view.game_details_scrollview.visibility = View.VISIBLE
 
             game = gameFound ?: game
-            game?.releaseDate = convertTimestampToString(game?.first_release_date ?: 0)
+            game?.releaseDate = convertTimestampToString(game?.first_release_date)
             game?.screenshots?.toMutableList()?.let { adapter.addItems(it) }
 
-            if(game?.platforms?.size!! > 0){
+            if(game?.platforms?.size ?: 0 > 0){
                 createTags(game?.platforms!!.map { it.abbreviation }, view.platforms_container)
             }
 
-            if(game?.genres?.size!! > 0){
+            if(game?.genres?.size ?: 0 > 0){
                 createTags(game?.genres!!.map { it.name }, view.genres_container)
             }
         }).execute()

@@ -92,10 +92,14 @@ fun convertFromBase64String(base64: String): Drawable?{
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun convertTimestampToString(time: Long): String{
-   return Instant.ofEpochSecond(time)
-       .atZone(ZoneId.systemDefault())
-       .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")).toString()
+fun convertTimestampToString(time: Long?): String{
+    return if(time != null){
+        Instant.ofEpochSecond(time)
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")).toString()
+    }else{
+        ""
+    }
 }
 
 fun processImage(game: Game, view: View){
@@ -117,8 +121,10 @@ fun processImage(game: Game, view: View){
                             is TextView -> {
                                 view.text = "";
                                 if (game != null) {
-                                    game.base64Image = convertToBase64String(img.drawable.toBitmap())
-                                    view.game_text.background = game.base64Image?.let {
+                                    if(img.drawable !=null){
+                                        game.base64Image = convertToBase64String(img.drawable.toBitmap())
+                                    }
+                                    view.background = game.base64Image?.let {
                                         convertFromBase64String(
                                             it
                                         )
@@ -129,16 +135,21 @@ fun processImage(game: Game, view: View){
                     }
 
                     override fun onError(e: Exception?) {
-                        view.game_text.background = null
+                        (view as TextView).text = game.name
                         Log.d("Image Not Found", "Image for game ${game?.name} not found")
                     }
                 })
     }else{
-        view.game_text.background = game?.base64Image?.let {
-            view.game_text.text = "";
+        view.background = game?.base64Image?.let {
+            (view as TextView).text = ""
             convertFromBase64String(
                 it
             )
+        }
+
+        if(view.background == null)
+        {
+            (view as TextView).text = game.name
         }
     }
 }
