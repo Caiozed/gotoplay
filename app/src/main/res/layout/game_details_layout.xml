@@ -38,6 +38,17 @@
             android:textSize="35dp"
             app:bindBackground="@{viewModel.game}" />
 
+        <include
+            android:id="@+id/game_rating_tag"
+            layout="@layout/tag_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/game_video_fab"
             android:layout_width="wrap_content"

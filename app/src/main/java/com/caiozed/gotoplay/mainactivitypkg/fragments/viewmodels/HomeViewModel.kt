@@ -30,10 +30,11 @@ class HomeViewModel(
         }
 
 
-    private fun searchForLatestGames(): MutableList<Game>?{
+    private fun searchForTopRatedGames(): MutableList<Game>?{
         games = IGDBService.getGames(
             """fields name, id, cover.url, cover.image_id, rating;
-                sort popularity desc;
+                where rating != null;
+                sort rating desc;
                 limit 10;
                 offset ${popularPage * 10};"""
         )
@@ -73,7 +74,7 @@ class HomeViewModel(
     }
 
     fun startSearch(context: Context) {
-        if(IGDBService.userKey.isNullOrEmpty()){
+        if(IGDBService.token.isNullOrEmpty()){
             MainActivity.instance.openDialog(ApiKeyFragment() ,{}, cancelable = false);
         }else{
 
@@ -82,7 +83,7 @@ class HomeViewModel(
             var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
 
             GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-            ) { return@GridLoadAsyncTask searchForLatestGames() }
+            ) { return@GridLoadAsyncTask searchForTopRatedGames() }
 
             GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
             ) { return@GridLoadAsyncTask searchForUpcomingReleases() }

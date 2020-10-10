@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun getConfigFile() {
         configPath = filesDir?.path.toString() + "/config.txt"
         try {
-              IGDBService.userKey = File(configPath).readText(Charsets.UTF_8)
+              IGDBService.token = File(configPath).readText(Charsets.UTF_8)
         }catch (e: Exception){
             d("file_not_found", "Config file not found!")
         }

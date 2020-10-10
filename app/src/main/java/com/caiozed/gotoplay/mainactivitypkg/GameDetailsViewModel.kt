@@ -1,10 +1,12 @@
 package com.caiozed.gotoplay.mainactivitypkg
 
+import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,7 @@ import com.caiozed.gotoplay.utils.IGDBService
 import com.caiozed.gotoplay.utils.convertTimestampToString
 import com.caiozed.gotoplay.utils.doAsyncSecondary
 import com.caiozed.gotoplay.utils.watchYoutubeVideo
+import kotlinx.android.synthetic.main.game_details_layout.*
 import kotlinx.android.synthetic.main.game_details_modal.*
 import kotlinx.android.synthetic.main.progress_bar.*
 import kotlinx.android.synthetic.main.tag_layout.view.*
@@ -43,6 +46,7 @@ class GameDetailsViewModel(var view: GameDetailsActivity) : BaseObservable() {
         view.screeshots_grid.layoutManager = LinearLayoutManager(view, LinearLayoutManager.HORIZONTAL ,false)
         view.screeshots_grid.adapter = adapter
         view.game_details_scrollview.visibility = View.INVISIBLE
+        view.game_rating_tag.visibility = View.INVISIBLE
 
         doAsyncSecondary({
             gameFound = IGDBService.getGames(
@@ -74,6 +78,10 @@ class GameDetailsViewModel(var view: GameDetailsActivity) : BaseObservable() {
             if(game?.genres?.size ?: 0 > 0){
                 createTags(game?.genres!!.map { it.name }, view.genres_container)
             }
+
+            if(game?.rating!! > 0){
+                createRating(game?.rating!!.toInt())
+            }
         }).execute()
     }
 
@@ -86,6 +94,25 @@ class GameDetailsViewModel(var view: GameDetailsActivity) : BaseObservable() {
                 container.addView(tagView)
             }
         }
+    }
+
+    private fun createRating(rating: Int) {
+        view.game_rating_tag.tag_text.text = rating.toString()
+        view.game_rating_tag.visibility = View.VISIBLE
+
+        var color = when (rating) {
+            in 75..100 -> R.color.green
+            in 50..74 -> R.color.yellow
+            else -> R.color.red
+        }
+
+        var textColor = when (rating) {
+            in 50..74 -> Color.BLACK
+            else -> Color.WHITE
+        }
+
+        view.game_rating_tag.tag_text_container.backgroundTintList = ContextCompat.getColorStateList(view, color)
+        view.game_rating_tag.tag_text.setTextColor(textColor)
     }
 }
 
