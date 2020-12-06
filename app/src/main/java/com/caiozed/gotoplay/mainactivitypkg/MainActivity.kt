@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.caiozed.gotoplay.R
 import com.caiozed.gotoplay.mainactivitypkg.fragments.*
 import com.caiozed.gotoplay.utils.IGDBService
+import com.caiozed.gotoplay.utils.doAsyncMain
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 import java.lang.Exception
@@ -25,7 +26,6 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity() {
     var bottomNavigation: BottomNavigationView? = null
     var currentFragment: Fragment? = null
-    var configPath = ""
 
     companion object {
         lateinit var instance: MainActivity
@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         instance = this
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
-        getConfigFile()
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -45,15 +44,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation!!.itemIconTintList = null
 
         openFragment(HomeFragment());
-    }
-
-    private fun getConfigFile() {
-        configPath = filesDir?.path.toString() + "/config.txt"
-        try {
-              IGDBService.token = File(configPath).readText(Charsets.UTF_8)
-        }catch (e: Exception){
-            d("file_not_found", "Config file not found!")
-        }
     }
 
 

@@ -14,6 +14,7 @@ import com.caiozed.gotoplay.models.Game
 import com.caiozed.gotoplay.utils.GridLoadAsyncTask
 import com.caiozed.gotoplay.utils.IGDBService
 
+
 class HomeViewModel(
     var homeFragment: HomeFragmentBinding
 ) : BaseObservable() {
@@ -75,23 +76,33 @@ class HomeViewModel(
 
     fun startSearch(context: Context) {
         if(IGDBService.token.isNullOrEmpty()){
-            MainActivity.instance.openDialog(ApiKeyFragment() ,{}, cancelable = false);
+            var dialog = ApiKeyFragment();
+            dialog.positiveAction = {
+                search(context)
+            }
+            MainActivity.instance.openDialog(dialog,{}, cancelable = false);
         }else{
-
-            var gridPopular = homeFragment.root!!.findViewById<RecyclerView>(R.id.popularGridView);
-            var gridUpcoming = homeFragment.root!!.findViewById<RecyclerView>(R.id.upcomingReleasesGridView);
-            var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
-
-            GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-            ) { return@GridLoadAsyncTask searchForTopRatedGames() }
-
-            GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-            ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
-
-            GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
-            ) { return@GridLoadAsyncTask searchForLatestReleases() }
+            search(context)
         }
     }
 
+    private fun search(context: Context){
+        var gridPopular = homeFragment.root!!.findViewById<RecyclerView>(R.id.popularGridView);
+        var gridUpcoming = homeFragment.root!!.findViewById<RecyclerView>(R.id.upcomingReleasesGridView);
+        var gridLatest = homeFragment.root!!.findViewById<RecyclerView>(R.id.latestReleasesGridView);
+
+        GridLoadAsyncTask(gridPopular, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        ) { return@GridLoadAsyncTask searchForTopRatedGames() }
+
+        GridLoadAsyncTask(gridUpcoming, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        ) { return@GridLoadAsyncTask searchForUpcomingReleases() }
+
+        GridLoadAsyncTask(gridLatest, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL ,false)
+        ) { return@GridLoadAsyncTask searchForLatestReleases() }
+    }
+
+    fun validate(){
+        IGDBService.validate();
+    }
 }
 
